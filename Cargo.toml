@@ -13,5 +13,5 @@ tokio = { version = "1", features = ["full"] }
 toml = "0.8.22"
 warp = "0.3.7"
 
-[lib]
-proc-macro = false
+# [lib]
+# proc-macro = false

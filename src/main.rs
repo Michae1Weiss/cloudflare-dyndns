@@ -5,7 +5,7 @@ use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, CONTENT_TYPE};
 use serde::Deserialize;
 use serde_json::Value;
 use tokio::sync::Mutex;
-use warp::Filter;
+use warp::{http::StatusCode, reply, Filter};
 
 #[derive(Debug, Deserialize)]
 struct Config {
@@ -70,25 +70,26 @@ async fn handle_update(
     params: std::collections::HashMap<String, String>,
     cfg_mutex: Arc<Mutex<Config>>,
 ) -> Result<impl warp::Reply, Infallible> {
-    let maybe_ip = params.get("myip");
-    let ip_str = match maybe_ip {
+    let ip_str = match params.get("myip") {
         Some(s) => s,
         None => {
-            return Ok(warp::reply::with_status(
-                "Missing myip parameter",
-                warp::http::StatusCode::BAD_REQUEST,
-            ));
+            let reply = reply::with_status(
+                reply::html("Missing myip parameter".to_string()),
+                StatusCode::BAD_REQUEST,
+            );
+            return Ok(reply);
         }
     };
 
-    // Parse IP address (must be IPv6 or IPv4, but we expect IPv6)
+    // Parse IP address
     let ip: IpAddr = match ip_str.parse() {
         Ok(ip) => ip,
         Err(_) => {
-            return Ok(warp::reply::with_status(
-                "Invalid IP format",
-                warp::http::StatusCode::BAD_REQUEST,
-            ));
+            let reply = reply::with_status(
+                reply::html("Invalid IP format".to_string()),
+                StatusCode::BAD_REQUEST,
+            );
+            return Ok(reply);
         }
     };
 
@@ -96,17 +97,13 @@ async fn handle_update(
     match update_cloudflare_dns(&config, ip).await {
         Ok(msg) => {
             info!("{}", msg);
-            Ok(warp::reply::with_status(
-                warp::reply::html(msg),
-                warp::http::StatusCode::OK,
-            ))
+            let reply = reply::with_status(reply::html(msg), StatusCode::OK);
+            Ok(reply)
         }
         Err(err_msg) => {
             error!("{}", err_msg);
-            Ok(warp::reply::with_status(
-                warp::reply::html(err_msg),
-                warp::http::StatusCode::INTERNAL_SERVER_ERROR,
-            ))
+            let reply = reply::with_status(reply::html(err_msg), StatusCode::INTERNAL_SERVER_ERROR);
+            Ok(reply)
         }
     }
 }
@@ -155,7 +152,7 @@ async fn update_cloudflare_dns(cfg: &Config, ip: IpAddr) -> Result<String, Strin
     );
 
     // Build body JSON
-    let mut body = serde_json::json!({
+    let body = serde_json::json!({
         "type": "AAAA",
         "name": cfg.record_name,
         "content": ip.to_string(),
