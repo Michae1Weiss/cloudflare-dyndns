@@ -96,12 +96,15 @@ async fn handle_update(
     match update_cloudflare_dns(&config, ip).await {
         Ok(msg) => {
             info!("{}", msg);
-            Ok(warp::reply::with_status(msg, warp::http::StatusCode::OK))
+            Ok(warp::reply::with_status(
+                warp::reply::html(msg),
+                warp::http::StatusCode::OK,
+            ))
         }
         Err(err_msg) => {
             error!("{}", err_msg);
             Ok(warp::reply::with_status(
-                err_msg,
+                warp::reply::html(err_msg),
                 warp::http::StatusCode::INTERNAL_SERVER_ERROR,
             ))
         }
