@@ -2,6 +2,7 @@
 name = "cloudflare-dyndns"
 version = "0.1.0"
 edition = "2021"
+authors = ["Mykhailo Bilyi"]
 
 [dependencies]
 cargo-deb = "2.12.1"
@@ -14,5 +15,14 @@ tokio = { version = "1", features = ["full"] }
 toml = "0.8.22"
 warp = "0.3.7"
 
-# [lib]
-# proc-macro = false
+# Nice example of a rust project that uses the cargo-deb
+# https://github.com/NLnetLabs/krill/tree/main
+# Official repo of cargo-deb
+# https://github.com/kornelski/cargo-deb/blob/main/systemd.md
+[package.metadata.deb]
+maintainer-scripts = "pkg/debian/"
+systemd-units = { enable = true }
+assets = [
+  ["target/release/cloudflare-dyndns", "usr/bin/", "755"],
+  ["defaults/config.toml", "/etc/cloudflare-dyndns/config.toml", "644"]
+]
