@@ -56,8 +56,8 @@ async fn main() {
     info!("Starting HTTP server on http://0.0.0.0:{}", addr.1);
     warp::serve(update_route)
         .tls()
-        .cert_path("/etc/cloudflare-dyndns/tsl/server.crt")
-        .key_path("/etc/cloudflare-dyndns/tsl/server.key")
+        .cert_path("/etc/cloudflare-dyndns/tls/server.crt")
+        .key_path("/etc/cloudflare-dyndns/tls/server.key")
         .run(addr)
         .await;
 }
