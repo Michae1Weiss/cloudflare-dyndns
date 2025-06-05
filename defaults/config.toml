@@ -1,0 +1,14 @@
+# Cloudflare Zone ID for your domain (find in Cloudflare dashboard)
+# zone_id = "xxx"
+
+# The full record name you want to update (e.g. "xxx.my" or "sub.xxx.my")
+# record_name = "example.com"
+
+# Cloudflare API token (scoped to zone, with DNS:Edit permissions)
+# api_token = "xxx"
+
+# Whether to proxy through Cloudflare (true) or just leave DNS only (false)
+# proxied = true
+
+# TTL (seconds). 300 = 5 minutes; use 1 or 300 as desired.
+# ttl = 300

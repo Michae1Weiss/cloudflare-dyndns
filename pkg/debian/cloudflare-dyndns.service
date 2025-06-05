@@ -1,0 +1,8 @@
+[Unit]
+Description=Simple DynDNS for Cloudflare written in Rust
+
+[Service]
+ExecStart=/usr/bin/cloudflare-dyndns
+
+[Install]
+WantedBy=multi-user.target
