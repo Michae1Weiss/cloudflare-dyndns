@@ -20,7 +20,7 @@ warp = "0.3.7"
 # https://github.com/kornelski/cargo-deb/blob/main/systemd.md
 [package.metadata.deb]
 maintainer-scripts = "pkg/debian/"
-systemd-units = { enable = true }
+systemd-units = { enable = false }
 assets = [
   ["target/release/cloudflare-dyndns", "usr/bin/", "755"],
   ["defaults/config.toml", "/etc/cloudflare-dyndns/config.toml", "644"]
