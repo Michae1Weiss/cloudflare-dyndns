@@ -54,7 +54,12 @@ async fn main() {
 
     let addr = ([0, 0, 0, 0], 8888);
     info!("Starting HTTP server on http://0.0.0.0:{}", addr.1);
-    warp::serve(update_route).run(addr).await;
+    warp::serve(update_route)
+        .tls()
+        .cert_path("/etc/cloudflare-dyndns/tsl/server.crt")
+        .key_path("/etc/cloudflare-dyndns/tsl/server.key")
+        .run(addr)
+        .await;
 }
 
 fn with_config(
