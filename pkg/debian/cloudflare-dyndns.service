@@ -3,6 +3,7 @@ Description=Simple DynDNS for Cloudflare written in Rust
 
 [Service]
 ExecStart=/usr/bin/cloudflare-dyndns
+Environment="RUST_LOG=info"
 
 [Install]
 WantedBy=multi-user.target
