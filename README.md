@@ -1,3 +1,8 @@
+## Important note
+Consider using the [inadyn](https://github.com/troglobit/inadyn/tree/master). 
+Works like a charm!
+My rust ddns was just a try to handle this on my own. 
+
 ## Getting Started
 1. Download `cloudflare-dyndns_0.1.0-1_amd64.deb` from releases
 2. Install the package with `dpkg -i cloudflare-dyndns_0.1.0-1_amd64.deb`
